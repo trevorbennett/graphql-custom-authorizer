@@ -8,3 +8,5 @@ Code backing my medium guide on how to build multiple authentication using a lam
 ### On tags used for Graphql resources
 
 See previous medium article on tags for why allocating custom tags for metrics is a good idea, for both cost management and resource planning
+
+### On graphql schema

@@ -10,6 +10,20 @@ Globals:
   Function:
     Timeout: 3
 
+Parameters:
+  Stage:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - qa
+      - prod
+    Description: environment to be configured within the .toml
+  ApiKey:
+    Type: String
+    Default: "7ad572dc-c56c-4ed8-a891-4760ff9b636b"
+    Description: Api Key as unencoded UUID for default auth and direct endpoint testing for lower envs
+
 Resources:
   CustomAuthorizerDemoLambda:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -22,16 +36,14 @@ Resources:
   BasicGraphqlApi:
     Type: AWS::AppSync::GraphQLApi
     Properties: 
-      # AdditionalAuthenticationProviders: 
-      #   - AdditionalAuthenticationProvider
+      AdditionalAuthenticationProviders: 
+        - 
+          AuthenticationType: AWS_LAMBDA
+          LambdaAuthorizerConfig: 
+            AuthorizerResultTtlInSeconds: 60
+            AuthorizerUri: !Ref CustomAuthorizerDemoLambda
       AuthenticationType: API_KEY
-      LambdaAuthorizerConfig: 
-        LambdaAuthorizerConfig
-      # LogConfig: 
-      #   LogConfig
       Name: !Sub "${stage}-graphql-custom-authorizer-api"
-      # OpenIDConnectConfig: 
-      #   OpenIDConnectConfig
       Tags: 
         - 
           Key: cost-allocatable
@@ -39,8 +51,6 @@ Resources:
         -
           Key: logical-resource
           Value: !Sub "${stage}-graphql-custom-authorizer"
-      # UserPoolConfig: 
-      #   UserPoolConfig
       XrayEnabled: false
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function

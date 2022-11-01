@@ -34,9 +34,7 @@ var generatePolicy = function(principalId, effect, resource) {
     
     // Optional output with custom properties of the String, Number or Boolean type.
     authResponse.context = {
-        "stringKey": "stringval",
-        "numberKey": 123,
-        "booleanKey": true
+        policyDocument
     };
     return authResponse;
 }
